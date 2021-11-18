@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 
 app = Flask(__name__)
 """
@@ -54,9 +54,23 @@ def kvetak():
 
 @app.route("/login/", methods=["GET"])
 def login():
+    login = request.args.get('login')
+    password = request.args.get('password')
+
     return render_template("login.html.j2")
 
 @app.route("/login/", methods=["POST"])
 def login_post():
-    
+    login = request.form.get('login')
+    password = request.form.get('password')  
+    print(login, password)
+    if login == 'karel' and password == 'abcdefg':
+        session['user'] = login
+        flash("úspěšné přihlášení", 'pass')
+
+    else:
+        flash("neplatné přihlašovací údaje", 'err')
+
+
+
     return redirect(url_for('login'))
